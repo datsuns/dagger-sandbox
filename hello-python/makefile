@@ -2,6 +2,7 @@ default:
 
 init:
 	dagger init --sdk python --name hello --source src
+	echo .venv >> .gitignore
 
 
 setup:
