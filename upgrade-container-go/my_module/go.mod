@@ -1,4 +1,4 @@
-module dagger/hello
+module dagger/my-module
 
 go 1.24.4
 

@@ -3,11 +3,10 @@ VERSION=$(shell dagger version | cut -d' ' -f2)
 default:
 
 init:
-	go get -u dagger.io/dagger
-	dagger init --sdk go --name hello --source src
+	dagger init --sdk go --name hello
 
 run:
-	cd src && go mod tidy && dagger run -i go run run.go main.go
+	cd cmd && go mod tidy && dagger run -i go run main.go
 
 call:
 	dagger call container-echo --string-arg hello
