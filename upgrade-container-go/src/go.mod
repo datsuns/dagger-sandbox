@@ -1,4 +1,4 @@
-module dagger/upgrade
+module dagger/hello
 
 go 1.24.4
 

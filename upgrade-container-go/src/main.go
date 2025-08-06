@@ -1,4 +1,4 @@
-// A generated module for Upgrade functions
+// A generated module for Hello functions
 //
 // This module has been generated via dagger init and serves as a reference to
 // basic module structure as you get started with Dagger.
@@ -12,22 +12,22 @@
 // rest is a long description with more detail on the module's purpose or usage,
 // if appropriate. All modules should have a short description.
 
-package upgrade
+package main
 
 import (
 	"context"
-	"dagger/upgrade/internal/dagger"
+	"dagger/hello/internal/dagger"
 )
 
-type Upgrade struct{}
+type Hello struct{}
 
 // Returns a container that echoes whatever string argument is provided
-func (m *Upgrade) ContainerEcho(stringArg string) *dagger.Container {
+func (m *Hello) ContainerEcho(stringArg string) *dagger.Container {
 	return dag.Container().From("alpine:latest").WithExec([]string{"echo", stringArg})
 }
 
 // Returns lines that match a pattern in the files of the provided Directory
-func (m *Upgrade) GrepDir(ctx context.Context, directoryArg *dagger.Directory, pattern string) (string, error) {
+func (m *Hello) GrepDir(ctx context.Context, directoryArg *dagger.Directory, pattern string) (string, error) {
 	return dag.Container().
 		From("alpine:latest").
 		WithMountedDirectory("/mnt", directoryArg).
