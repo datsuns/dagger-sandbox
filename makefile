@@ -1,14 +1,34 @@
+VERSION=$(shell dagger version | cut -d' ' -f2)
+
 default:
 
 init:
-	dagger init --sdk python --name hello --source .
+	go get -u dagger.io/dagger
+	dagger init --sdk go --name hello --source src
 
 run:
+	cd src && go mod tidy && dagger run -i go run run.go main.go
+
+call:
+	dagger call container-echo --string-arg hello
+
+init_py:
+	dagger init --sdk python --name hello --source src
+
+run_py:
 	cd src && python main.py
 
-install:
+install_py:
 	python -m venv .venv
 	source .venv/bin/activate
 	pip install dagger-io
 
-.PHONY: default init install
+enable_gpu:
+	# https://docs.dagger.io/configuration/custom-runner
+	echo $(VERSION)
+	docker rm -f dagger-engine-$(VERSION) 2>/dev/null && docker run --gpus all -d --privileged -e _EXPERIMENTAL_DAGGER_GPU_SUPPORT=true --name dagger-engine-$(VERSION) registry.dagger.io/engine:$(VERSION)-gpu -- --debug
+
+check_gpu:
+	dagger -m github.com/samalba/dagger-modules/nvidia-gpu call has-gpu
+
+.PHONY: default int run init_py run_py install_py enable_gpu check_gpu
