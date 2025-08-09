@@ -30,4 +30,11 @@ enable_gpu:
 check_gpu:
 	dagger -m github.com/samalba/dagger-modules/nvidia-gpu call has-gpu
 
-.PHONY: default int run init_py run_py install_py enable_gpu check_gpu
+export_docker_image:
+	dagger call export-docker-image --string-arg hell2 export --path=./image.tgz
+
+load_exported_image:
+	bash ../load_image.sh image.tgz
+
+
+.PHONY: default int run init_py run_py install_py enable_gpu check_gpu export_docker_image
