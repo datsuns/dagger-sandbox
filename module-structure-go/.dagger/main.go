@@ -17,6 +17,7 @@ package main
 import (
 	"context"
 	"dagger/module-structure-go/internal/dagger"
+	"dagger/module-structure-go/utils"
 )
 
 type ModuleStructureGo struct{}
@@ -34,4 +35,11 @@ func (m *ModuleStructureGo) GrepDir(ctx context.Context, directoryArg *dagger.Di
 		WithWorkdir("/mnt").
 		WithExec([]string{"grep", "-R", pattern, "."}).
 		Stdout(ctx)
+}
+
+func (m *ModuleStructureGo) GetUser(ctx context.Context) (string, error) {
+	// dag はトップパッケージでだけ見えるシングルトン的な生成物。
+	// サブパッケージへは *dagger.Client を渡す。
+	var client *dagger.Client = dag
+	return utils.FetchName(ctx, client)
 }
