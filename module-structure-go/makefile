@@ -1,0 +1,6 @@
+default:
+
+
+init:
+	dagger init
+
