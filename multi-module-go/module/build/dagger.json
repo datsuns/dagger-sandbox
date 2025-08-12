@@ -1,0 +1,7 @@
+{
+  "name": "multi-module/module/build",
+  "engineVersion": "v0.18.14",
+  "sdk": {
+    "source": "go"
+  }
+}
