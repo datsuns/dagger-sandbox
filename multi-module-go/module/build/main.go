@@ -17,13 +17,14 @@ package main
 import (
 	"context"
 	"dagger/multi-module/module/build/internal/dagger"
+	"multi-module/lib/common"
 )
 
 type MultiModulemodulebuild struct{}
 
 // Returns a container that echoes whatever string argument is provided
 func (m *MultiModulemodulebuild) ContainerEcho(stringArg string) *dagger.Container {
-	return dag.Container().From("alpine:latest").WithExec([]string{"echo", stringArg})
+	return dag.Container().From("alpine:latest").WithExec([]string{common.Prefix("echo"), stringArg})
 }
 
 // Returns lines that match a pattern in the files of the provided Directory
