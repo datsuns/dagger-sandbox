@@ -1,7 +1,13 @@
+from typing import Annotated
 import dagger
 import os
 import yaml
-from dagger import dag, function, object_type
+from dagger import dag, function, object_type, DefaultPath, Doc
+
+
+def build_default_yml_path():
+    dagger_cmd_exec_path = os.path.join(os.path.dirname(__file__), '..', '..')
+    return os.path.join(dagger_cmd_exec_path, 'config.yml')
 
 
 @object_type
@@ -12,12 +18,16 @@ class Load:
         return config
 
     @function
-    def test(self) -> dagger.Container:
-        dagger_cmd_exec_path = os.path.join(os.path.dirname(__file__), '..', '..')
-        yaml_path = os.path.join(dagger_cmd_exec_path, 'config.yml')
-        cfg = self.load_config(yaml_path)
+    async def test(self, source: Annotated[
+        dagger.File, DefaultPath('config.yml'), Doc("hello-dagger source directory")
+    ],) -> dagger.Container:
+        raw = await source.contents()
+        print(raw)
+        cfg = yaml.safe_load(raw)
         print(cfg)
-        return (
+        # cfg = self.load_config(build_default_yml_path())
+        # print(cfg)
+        return await (
             dag.container()
             .from_("alpine:latest")
         )
